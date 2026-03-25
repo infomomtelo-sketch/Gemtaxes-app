@@ -7,7 +7,7 @@ export default function Home() {
       <ul>
         <li><a href="/login">Login</a></li>
         <li><a href="/chat">Chat</a></li>
-        <li><a href="/households">Household</a></li>
+        <li><a href="/household">Household</a></li>
       </ul>
     </main>
   )
