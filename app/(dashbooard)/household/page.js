@@ -3,17 +3,17 @@
 import { useState } from 'react'
 
 export default function HouseholdPage() {
-  const [primaryIdLast4, setPrimaryIdLast4] = useState('')
-  const [spouseIdLast4, setSpouseIdLast4] = useState('')
   const [filingStatus, setFilingStatus] = useState('')
   const [primaryFirstName, setPrimaryFirstName] = useState('')
   const [primaryLastName, setPrimaryLastName] = useState('')
   const [primaryIdType, setPrimaryIdType] = useState('SSN')
+  const [primaryIdLast4, setPrimaryIdLast4] = useState('')
 
   const [hasSpouse, setHasSpouse] = useState('no')
   const [spouseFirstName, setSpouseFirstName] = useState('')
   const [spouseLastName, setSpouseLastName] = useState('')
   const [spouseIdType, setSpouseIdType] = useState('SSN')
+  const [spouseIdLast4, setSpouseIdLast4] = useState('')
   const [filingSeparately, setFilingSeparately] = useState('no')
 
   const [saved, setSaved] = useState(false)
@@ -70,21 +70,21 @@ export default function HouseholdPage() {
 
             <select
               value={primaryIdType}
-                <input
-  type="text"
-  placeholder="Tax ID last 4"
-  value={primaryIdLast4}
-  onChange={(e) => setPrimaryIdLast4(e.target.value)}
-  maxLength={4}
-  style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
-/>
-              
-onChange={(e) => setPrimaryIdType(e.target.value)}
+              onChange={(e) => setPrimaryIdType(e.target.value)}
               style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
             >
               <option value="SSN">SSN</option>
               <option value="ITIN">ITIN</option>
             </select>
+
+            <input
+              type="text"
+              placeholder="Tax ID last 4"
+              value={primaryIdLast4}
+              onChange={(e) => setPrimaryIdLast4(e.target.value)}
+              maxLength={4}
+              style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
+            />
           </div>
         </div>
 
@@ -93,6 +93,7 @@ onChange={(e) => setPrimaryIdType(e.target.value)}
 
           <div style={{ display: 'grid', gap: '12px' }}>
             <label>Do you have a spouse?</label>
+
             <select
               value={hasSpouse}
               onChange={(e) => setHasSpouse(e.target.value)}
@@ -124,21 +125,22 @@ onChange={(e) => setPrimaryIdType(e.target.value)}
                   value={spouseIdType}
                   onChange={(e) => setSpouseIdType(e.target.value)}
                   style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
-               <input
-  type="text"
-  placeholder="Spouse tax ID last 4"
-  value={spouseIdLast4}
-  onChange={(e) => setSpouseIdLast4(e.target.value)}
-  maxLength={4}
-  style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
-/>
-  
-                  >
+                >
                   <option value="SSN">SSN</option>
                   <option value="ITIN">ITIN</option>
                 </select>
 
+                <input
+                  type="text"
+                  placeholder="Spouse tax ID last 4"
+                  value={spouseIdLast4}
+                  onChange={(e) => setSpouseIdLast4(e.target.value)}
+                  maxLength={4}
+                  style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
+                />
+
                 <label>Are you filing separately from your spouse?</label>
+
                 <select
                   value={filingSeparately}
                   onChange={(e) => setFilingSeparately(e.target.value)}
