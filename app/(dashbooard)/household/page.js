@@ -3,6 +3,8 @@
 import { useState } from 'react'
 
 export default function HouseholdPage() {
+  const [primaryIdLast4, setPrimaryIdLast4] = useState('')
+  const [spouseIdLast4, setSpouseIdLast4] = useState('')
   const [filingStatus, setFilingStatus] = useState('')
   const [primaryFirstName, setPrimaryFirstName] = useState('')
   const [primaryLastName, setPrimaryLastName] = useState('')
@@ -68,7 +70,16 @@ export default function HouseholdPage() {
 
             <select
               value={primaryIdType}
-              onChange={(e) => setPrimaryIdType(e.target.value)}
+                <input
+  type="text"
+  placeholder="Tax ID last 4"
+  value={primaryIdLast4}
+  onChange={(e) => setPrimaryIdLast4(e.target.value)}
+  maxLength={4}
+  style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
+/>
+              
+onChange={(e) => setPrimaryIdType(e.target.value)}
               style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
             >
               <option value="SSN">SSN</option>
