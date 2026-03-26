@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import QuestionCard from '../../../components/QuestionCard'
 
 const questions = [
@@ -129,9 +130,19 @@ function formatAnswer(questionId, value) {
 }
 
 export default function ChatPage() {
+  const searchParams = useSearchParams()
   const [stepIndex, setStepIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [helperMode, setHelperMode] = useState('')
+
+  useEffect(() => {
+    const restart = searchParams.get('restart')
+    if (restart === '1') {
+      setAnswers({})
+      setHelperMode('')
+      setStepIndex(0)
+    }
+  }, [searchParams])
 
   const currentQuestion = questions[stepIndex]
   const isComplete = stepIndex >= questions.length
@@ -302,6 +313,23 @@ export default function ChatPage() {
           <p><strong>Filing status:</strong> {formatAnswer('filing_status', answers.filing_status)}</p>
           <p><strong>W-2 forms:</strong> {formatAnswer('w2_income', answers.w2_income)}</p>
           <p><strong>1099 forms:</strong> {formatAnswer('has_1099', answers.has_1099)}</p>
+
+          <button
+            onClick={() => {
+              setAnswers({})
+              setHelperMode('')
+              setStepIndex(0)
+            }}
+            style={{
+              marginTop: '16px',
+              padding: '12px 16px',
+              borderRadius: '10px',
+              border: '1px solid #ddd',
+              cursor: 'pointer'
+            }}
+          >
+            Start over
+          </button>
         </div>
       )}
     </div>
