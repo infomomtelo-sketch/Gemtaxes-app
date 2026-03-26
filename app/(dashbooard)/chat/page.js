@@ -29,6 +29,23 @@ const questions = [
         label: 'Head of Household',
         description: 'May apply if you paid most household costs and meet IRS qualifying rules.'
       }
+    ],
+    unsureText: [
+      'Single is usually for someone who is not married for tax filing purposes.',
+      'Married Filing Jointly means one return together with your spouse.',
+      'Married Filing Separately means each spouse files a separate return.',
+      'Head of Household may apply in special household support situations.'
+    ],
+    compareTitle: 'Compare filing status options',
+    compareItems: [
+      {
+        title: 'Married Filing Jointly',
+        points: ['One combined return', 'Often simpler', 'May allow more credits']
+      },
+      {
+        title: 'Married Filing Separately',
+        points: ['Separate returns', 'Keeps tax responsibility separate', 'Some credits may be limited']
+      }
     ]
   },
   {
@@ -39,6 +56,22 @@ const questions = [
       { value: 'yes', label: 'Yes', description: 'I received at least one W-2.' },
       { value: 'no', label: 'No', description: 'I did not receive a W-2.' },
       { value: 'not_sure', label: 'Not sure', description: 'I need help identifying my income form.' }
+    ],
+    unsureText: [
+      'A W-2 usually comes from an employer who paid you wages.',
+      'It often shows wages, federal tax withheld, and Social Security and Medicare amounts.',
+      'If you worked as an employee, you likely received a W-2.'
+    ],
+    compareTitle: 'Compare common work income types',
+    compareItems: [
+      {
+        title: 'W-2',
+        points: ['Employee income', 'Taxes often withheld already', 'Usually from an employer']
+      },
+      {
+        title: '1099',
+        points: ['Independent contractor or other non-wage income', 'Taxes may not be withheld', 'Often from gigs or client work']
+      }
     ]
   },
   {
@@ -49,9 +82,51 @@ const questions = [
       { value: 'yes', label: 'Yes', description: 'I received one or more 1099 forms.' },
       { value: 'no', label: 'No', description: 'I did not receive any 1099 forms.' },
       { value: 'not_sure', label: 'Not sure', description: 'I need help identifying my income form.' }
+    ],
+    unsureText: [
+      'A 1099 is often used for contractor, gig, payment app, or other non-wage income.',
+      'If you were not treated as an employee, you may have received a 1099 instead of a W-2.',
+      'Some users receive both W-2 and 1099 forms in the same year.'
+    ],
+    compareTitle: 'Compare W-2 and 1099',
+    compareItems: [
+      {
+        title: 'W-2',
+        points: ['Employee', 'Employer usually withholds taxes', 'Payroll-style income']
+      },
+      {
+        title: '1099',
+        points: ['Independent work or other payments', 'May require tracking your own taxes', 'Common for gigs and side work']
+      }
     ]
   }
 ]
+
+function formatAnswer(questionId, value) {
+  const labels = {
+    filing_status: {
+      single: 'Single',
+      married_joint: 'Married Filing Jointly',
+      married_separate: 'Married Filing Separately',
+      head_of_household: 'Head of Household',
+      skipped: 'Skipped'
+    },
+    w2_income: {
+      yes: 'Yes',
+      no: 'No',
+      not_sure: 'Not sure',
+      skipped: 'Skipped'
+    },
+    has_1099: {
+      yes: 'Yes',
+      no: 'No',
+      not_sure: 'Not sure',
+      skipped: 'Skipped'
+    }
+  }
+
+  return labels[questionId]?.[value] || value
+}
 
 export default function ChatPage() {
   const [stepIndex, setStepIndex] = useState(0)
@@ -62,14 +137,12 @@ export default function ChatPage() {
   const isComplete = stepIndex >= questions.length
 
   function handleSelect(value) {
-    const nextAnswers = {
-      ...answers,
+    setAnswers((prev) => ({
+      ...prev,
       [currentQuestion.id]: value
-    }
-
-    setAnswers(nextAnswers)
+    }))
     setHelperMode('')
-    setStepIndex(stepIndex + 1)
+    setStepIndex((prev) => prev + 1)
   }
 
   function handleCompare() {
@@ -78,6 +151,21 @@ export default function ChatPage() {
 
   function handleUnsure() {
     setHelperMode('unsure')
+  }
+
+  function handleBack() {
+    if (stepIndex === 0) return
+    setHelperMode('')
+    setStepIndex((prev) => prev - 1)
+  }
+
+  function handleSkip() {
+    setAnswers((prev) => ({
+      ...prev,
+      [currentQuestion.id]: 'skipped'
+    }))
+    setHelperMode('')
+    setStepIndex((prev) => prev + 1)
   }
 
   function chooseDirect(value) {
@@ -90,6 +178,10 @@ export default function ChatPage() {
 
       {!isComplete && (
         <>
+          <div style={{ marginBottom: '12px', color: '#555' }}>
+            Question {stepIndex + 1} of {questions.length}
+          </div>
+
           <QuestionCard
             title={currentQuestion.title}
             helpText={currentQuestion.helpText}
@@ -99,7 +191,35 @@ export default function ChatPage() {
             onUnsure={handleUnsure}
           />
 
-          {helperMode === 'unsure' && currentQuestion.id === 'filing_status' && (
+          <div style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
+            <button
+              onClick={handleBack}
+              disabled={stepIndex === 0}
+              style={{
+                padding: '12px 16px',
+                borderRadius: '10px',
+                border: '1px solid #ddd',
+                cursor: stepIndex === 0 ? 'not-allowed' : 'pointer',
+                opacity: stepIndex === 0 ? 0.5 : 1
+              }}
+            >
+              Back
+            </button>
+
+            <button
+              onClick={handleSkip}
+              style={{
+                padding: '12px 16px',
+                borderRadius: '10px',
+                border: '1px solid #ddd',
+                cursor: 'pointer'
+              }}
+            >
+              Skip
+            </button>
+          </div>
+
+          {helperMode === 'unsure' && (
             <div
               style={{
                 marginTop: '20px',
@@ -109,14 +229,14 @@ export default function ChatPage() {
                 maxWidth: '760px'
               }}
             >
-              <h3>Not sure which one to choose?</h3>
-              <p>Married Filing Jointly means one return together.</p>
-              <p>Married Filing Separately means each spouse files a separate return.</p>
-              <p>Filing separately can reduce some credits and deductions.</p>
+              <h3>Not sure?</h3>
+              {currentQuestion.unsureText?.map((line, index) => (
+                <p key={index} style={{ marginBottom: '8px' }}>{line}</p>
+              ))}
             </div>
           )}
 
-          {helperMode === 'compare' && currentQuestion.id === 'filing_status' && (
+          {helperMode === 'compare' && (
             <div
               style={{
                 marginTop: '20px',
@@ -126,47 +246,44 @@ export default function ChatPage() {
                 maxWidth: '760px'
               }}
             >
-              <h3>Compare these options</h3>
+              <h3>{currentQuestion.compareTitle}</h3>
 
-              <div style={{ marginBottom: '16px' }}>
-                <strong>Married Filing Jointly</strong>
-                <div>• One combined return</div>
-                <div>• Often simpler</div>
-                <div>• May allow more credits</div>
-              </div>
+              {currentQuestion.compareItems?.map((item) => (
+                <div key={item.title} style={{ marginBottom: '16px' }}>
+                  <strong>{item.title}</strong>
+                  {item.points.map((point, index) => (
+                    <div key={index}>• {point}</div>
+                  ))}
+                </div>
+              ))}
 
-              <div style={{ marginBottom: '16px' }}>
-                <strong>Married Filing Separately</strong>
-                <div>• Separate returns</div>
-                <div>• Keeps tax responsibility separate</div>
-                <div>• Some credits may be limited</div>
-              </div>
+              {currentQuestion.id === 'filing_status' && (
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={() => chooseDirect('married_joint')}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '10px',
+                      border: '1px solid #ddd',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Choose Joint
+                  </button>
 
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <button
-                  onClick={() => chooseDirect('married_joint')}
-                  style={{
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    border: '1px solid #ddd',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Choose Joint
-                </button>
-
-                <button
-                  onClick={() => chooseDirect('married_separate')}
-                  style={{
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    border: '1px solid #ddd',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Choose Separate
-                </button>
-              </div>
+                  <button
+                    onClick={() => chooseDirect('married_separate')}
+                    style={{
+                      padding: '12px 16px',
+                      borderRadius: '10px',
+                      border: '1px solid #ddd',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Choose Separate
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -182,9 +299,9 @@ export default function ChatPage() {
           }}
         >
           <h2>Interview Summary</h2>
-          <p><strong>Filing status:</strong> {answers.filing_status}</p>
-          <p><strong>W-2 forms:</strong> {answers.w2_income}</p>
-          <p><strong>1099 forms:</strong> {answers.has_1099}</p>
+          <p><strong>Filing status:</strong> {formatAnswer('filing_status', answers.filing_status)}</p>
+          <p><strong>W-2 forms:</strong> {formatAnswer('w2_income', answers.w2_income)}</p>
+          <p><strong>1099 forms:</strong> {formatAnswer('has_1099', answers.has_1099)}</p>
         </div>
       )}
     </div>
