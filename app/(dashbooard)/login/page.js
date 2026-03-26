@@ -23,8 +23,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ maxWidth: '460px' }}>
-      <h1 style={{ marginBottom: '20px' }}>Login</h1>
+    <div style={{ maxWidth: '460px', width: '100%' }}>
+  <h1 style={{ marginBottom: '20px' }}>Login</h1>
 
       {step === 'login' && (
         <form onSubmit={handleLogin} style={{ display: 'grid', gap: '12px' }}>
@@ -44,18 +44,21 @@ export default function LoginPage() {
             style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
           />
 
-          <button
-            type="submit"
-            style={{
-              padding: '14px',
-              border: 'none',
-              borderRadius: '10px',
-              cursor: 'pointer'
-            }}
-          >
-            Sign in
-          </button>
-
+         <button
+  type="submit"
+  style={{
+    padding: '14px',
+    border: 'none',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    background: '#111',
+    color: '#fff',
+    fontWeight: '600',
+    width: '100%'
+  }}
+>
+  Sign in
+</button>
           <div style={{ display: 'grid', gap: '8px', marginTop: '8px' }}>
             <a href="/forgot-password">Forgot password?</a>
             <a href="/forgot-username">Forgot username?</a>
