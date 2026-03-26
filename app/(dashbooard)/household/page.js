@@ -124,7 +124,16 @@ onChange={(e) => setPrimaryIdType(e.target.value)}
                   value={spouseIdType}
                   onChange={(e) => setSpouseIdType(e.target.value)}
                   style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
-                >
+               <input
+  type="text"
+  placeholder="Spouse tax ID last 4"
+  value={spouseIdLast4}
+  onChange={(e) => setSpouseIdLast4(e.target.value)}
+  maxLength={4}
+  style={{ padding: '14px', border: '1px solid #ccc', borderRadius: '10px' }}
+/>
+  
+                  >
                   <option value="SSN">SSN</option>
                   <option value="ITIN">ITIN</option>
                 </select>
