@@ -11,8 +11,11 @@ export default function QuestionCard({
   return (
     <div style={{ maxWidth: '760px' }}>
       <h2 style={{ marginBottom: '8px' }}>{title}</h2>
+
       {helpText && (
-        <p style={{ marginBottom: '16px', color: '#555' }}>{helpText}</p>
+        <p style={{ marginBottom: '16px', color: '#555' }}>
+          {helpText}
+        </p>
       )}
 
       <div style={{ display: 'grid', gap: '12px' }}>
@@ -32,6 +35,7 @@ export default function QuestionCard({
             <div style={{ fontWeight: '600', marginBottom: '4px' }}>
               {option.label}
             </div>
+
             {option.description && (
               <div style={{ color: '#555', fontSize: '14px' }}>
                 {option.description}
@@ -41,8 +45,9 @@ export default function QuestionCard({
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+      <div style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
         <button
+          type="button"
           onClick={onUnsure}
           style={{
             padding: '12px 16px',
@@ -55,6 +60,7 @@ export default function QuestionCard({
         </button>
 
         <button
+          type="button"
           onClick={onCompare}
           style={{
             padding: '12px 16px',
