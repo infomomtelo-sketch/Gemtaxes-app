@@ -5,7 +5,7 @@ export default function DashboardLayout({ children }) {
         <h2>GemTaxes</h2>
         <nav>
           <ul style={{ listStyle: 'none', padding: 0, lineHeight: '2' }}>
-            <li><a href="/chat">Chat</a></li>
+            <li><a href="/chat?restart=1">Chat</a></li>
             <li><a href="/household">Household</a></li>
             <li><a href="/login">Login</a></li>
           </ul>
