@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }) {
             <li><a href="/login">Login</a></li>
           </ul>
         </nav>
-  
+      </aside>
 
       <main style={{ flex: 1, padding: '32px' }}>
         {children}
