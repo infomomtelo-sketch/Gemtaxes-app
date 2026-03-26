@@ -1,7 +1,7 @@
 export default function DashboardLayout({ children }) {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Arial, sans-serif' }}>
-      <aside style={{ width: '240px', padding: '24px', borderRight: '1px solid #ddd' }}>
+      <aside style={{ width: '180px', padding: '24px', borderRight: '1px solid #ddd' }}>
         <h2>GemTaxes</h2>
         <nav>
           <ul style={{ listStyle: 'none', padding: 0, lineHeight: '2' }}>
@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }) {
         </nav>
       </aside>
 
-      <main style={{ flex: 1, padding: '32px' }}>
+      <main style={{ flex: 1, padding: '20px' }}>
         {children}
       </main>
     </div>
