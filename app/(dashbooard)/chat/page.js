@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import QuestionCard from '../../../components/QuestionCard'
 
 const questions = [
@@ -130,19 +129,9 @@ function formatAnswer(questionId, value) {
 }
 
 export default function ChatPage() {
-  const searchParams = useSearchParams()
   const [stepIndex, setStepIndex] = useState(0)
   const [answers, setAnswers] = useState({})
   const [helperMode, setHelperMode] = useState('')
-
-  useEffect(() => {
-    const restart = searchParams.get('restart')
-    if (restart === '1') {
-      setAnswers({})
-      setHelperMode('')
-      setStepIndex(0)
-    }
-  }, [searchParams])
 
   const currentQuestion = questions[stepIndex]
   const isComplete = stepIndex >= questions.length
